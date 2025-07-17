@@ -63,7 +63,7 @@ cf login
 ### good case
 Run the plugin with manifest.
 ```sh
-cf  verify-manifest -f ./manifest-good.yml
+cf  verify-manifest -f ./fixtures/manifest-good.yml
 ```
 ```
 Using manifestPath: './manifest-good.yml'
@@ -102,7 +102,7 @@ echo $?
 
 ### bad case.
 ```sh
-cf verify-manifest -f ./manifest-bad.yml
+cf  verify-manifest -f ./fixtures/manifest-bad.yml
 ```
 
 ```sh

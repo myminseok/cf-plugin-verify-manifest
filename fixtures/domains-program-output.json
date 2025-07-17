@@ -1,0 +1,400 @@
+[
+  {
+    "pagination": {
+      "total_results": 12,
+      "total_pages": 1,
+      "first": {
+        "href": "https://api.sys.dhaka.cf-app.com/v3/domains?page=1&per_page=50"
+      },
+      "last": {
+        "href": "https://api.sys.dhaka.cf-app.com/v3/domains?page=1&per_page=50"
+      },
+      "next": null,
+      "previous": null
+    },
+    "resources": [
+      {
+        "guid": "b6617e82-2877-4922-9565-80b03d7a1ded",
+        "created_at": "2021-03-23T23:24:26Z",
+        "updated_at": "2021-03-23T23:24:26Z",
+        "name": "apps.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/b6617e82-2877-4922-9565-80b03d7a1ded"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/b6617e82-2877-4922-9565-80b03d7a1ded/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "ba337f80-3b6a-49f2-a2ae-9653daeec62f",
+        "created_at": "2021-03-23T23:24:26Z",
+        "updated_at": "2021-03-23T23:24:26Z",
+        "name": "apps.internal",
+        "internal": true,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/ba337f80-3b6a-49f2-a2ae-9653daeec62f"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/ba337f80-3b6a-49f2-a2ae-9653daeec62f/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "38732e6f-b235-44be-8053-d4faf995e64c",
+        "created_at": "2021-06-16T17:31:37Z",
+        "updated_at": "2021-06-16T17:31:37Z",
+        "name": "bad.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/38732e6f-b235-44be-8053-d4faf995e64c"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/38732e6f-b235-44be-8053-d4faf995e64c/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "e2fbfbb0-129a-4d06-8e3a-e18b1b48ff70",
+        "created_at": "2023-01-25T00:01:30Z",
+        "updated_at": "2023-01-25T00:01:30Z",
+        "name": "cfapps.io",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/e2fbfbb0-129a-4d06-8e3a-e18b1b48ff70"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/e2fbfbb0-129a-4d06-8e3a-e18b1b48ff70/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "6364cc42-0853-4a86-bb9a-3032adb429f8",
+        "created_at": "2023-03-15T17:00:09Z",
+        "updated_at": "2023-03-15T17:00:09Z",
+        "name": "dhaka.stevenson.ci",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/6364cc42-0853-4a86-bb9a-3032adb429f8"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/6364cc42-0853-4a86-bb9a-3032adb429f8/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "3b0d8653-0457-49e6-8aa1-d2561aa63986",
+        "created_at": "2023-07-21T22:18:48Z",
+        "updated_at": "2023-07-21T22:18:48Z",
+        "name": "gslb.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/3b0d8653-0457-49e6-8aa1-d2561aa63986"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/3b0d8653-0457-49e6-8aa1-d2561aa63986/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "03712112-d6ed-4d69-9752-1fb2f2734adc",
+        "created_at": "2023-07-24T19:00:19Z",
+        "updated_at": "2023-07-24T19:00:19Z",
+        "name": "europe.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/03712112-d6ed-4d69-9752-1fb2f2734adc"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/03712112-d6ed-4d69-9752-1fb2f2734adc/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "7449f5a7-c1d6-4b6b-8a94-b4f464e99cb5",
+        "created_at": "2024-11-18T18:19:40Z",
+        "updated_at": "2024-11-18T18:19:40Z",
+        "name": "tcp2.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": {
+          "guid": "e93505ef-c56d-48ba-7e99-867b6d100a8f"
+        },
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/7449f5a7-c1d6-4b6b-8a94-b4f464e99cb5"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/7449f5a7-c1d6-4b6b-8a94-b4f464e99cb5/route_reservations"
+          },
+          "router_group": {
+            "href": "https://api.sys.dhaka.cf-app.com/routing/v1/router_groups/e93505ef-c56d-48ba-7e99-867b6d100a8f"
+          }
+        }
+      },
+      {
+        "guid": "df07e153-83b9-4c3e-916f-461440c54a0a",
+        "created_at": "2025-01-13T23:14:10Z",
+        "updated_at": "2025-01-13T23:14:10Z",
+        "name": "tp.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/df07e153-83b9-4c3e-916f-461440c54a0a"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/df07e153-83b9-4c3e-916f-461440c54a0a/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "bf6b8c0b-32cf-4832-8b52-f423471185fc",
+        "created_at": "2025-01-22T19:52:05Z",
+        "updated_at": "2025-01-22T19:52:05Z",
+        "name": "tp.flouri.sh",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/bf6b8c0b-32cf-4832-8b52-f423471185fc"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/bf6b8c0b-32cf-4832-8b52-f423471185fc/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "8a34e080-046c-4676-a77d-7623f5989a0d",
+        "created_at": "2025-05-28T23:23:25Z",
+        "updated_at": "2025-05-28T23:23:25Z",
+        "name": "dhaka.cf-app.com",
+        "internal": false,
+        "router_group": null,
+        "supported_protocols": [
+          "http"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/8a34e080-046c-4676-a77d-7623f5989a0d"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/8a34e080-046c-4676-a77d-7623f5989a0d/route_reservations"
+          }
+        }
+      },
+      {
+        "guid": "bec85857-723f-4fc2-8b7a-38c21fa91d90",
+        "created_at": "2025-06-19T14:40:44Z",
+        "updated_at": "2025-06-19T14:40:44Z",
+        "name": "tcp.dhaka.cf-app.com",
+        "internal": false,
+        "router_group": {
+          "guid": "225da956-d2e7-4d42-42af-f3820da494d6"
+        },
+        "supported_protocols": [
+          "tcp"
+        ],
+        "relationships": {
+          "organization": {
+            "data": null
+          },
+          "shared_organizations": {
+            "data": []
+          }
+        },
+        "metadata": {
+          "labels": {},
+          "annotations": {}
+        },
+        "links": {
+          "self": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/bec85857-723f-4fc2-8b7a-38c21fa91d90"
+          },
+          "route_reservations": {
+            "href": "https://api.sys.dhaka.cf-app.com/v3/domains/bec85857-723f-4fc2-8b7a-38c21fa91d90/route_reservations"
+          },
+          "router_group": {
+            "href": "https://api.sys.dhaka.cf-app.com/routing/v1/router_groups/225da956-d2e7-4d42-42af-f3820da494d6"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -36,12 +36,12 @@ func (c *VerifyManifestPlugin) GetMetadata() plugin.PluginMetadata {
 
 func (c *VerifyManifestPlugin) Run(cliConnection plugin.CliConnection, args []string) {
 	if args[0] == "verify-manifest" {
-		manifestPath := ParseArgs(args)
-		manifest := loadYAML(manifestPath)
+		manifestPath, _ := ParseArgs(args)
+		manifest := LoadYAML(manifestPath)
 		print_cf_target(cliConnection, args)
 		var all_good = true
-		all_good = check_manifest_services(cliConnection, manifestPath, manifest)
-		all_good = check_routes(cliConnection, manifestPath, manifest)
+		all_good = Check_services(cliConnection, manifestPath, manifest)
+		all_good = Check_routes(cliConnection, manifestPath, manifest)
 		if !all_good {
 			os.Exit(1)
 		}
@@ -52,28 +52,33 @@ func print_usage() {
 	fmt.Println("Usage: cf verify-manifest -f PATH_TO_MANIFEST [-debug true]")
 }
 
-func ParseArgs(args []string) string {
+func ParseArgs(args []string) (string, error) {
 
 	flags := flag.NewFlagSet("verify-manifest", flag.ContinueOnError)
 	manifestPath := flags.String("f", "", "path to an application manifest")
 	debugModeFlag := flags.String("debug", "", "verbose plugin")
 	err := flags.Parse(args[1:])
+	// if err != nil {
+	// 	// fmt.Printf("[ERROR] %s\n", err)
+	// 	// print_usage()
+	// 	// os.Exit(1)
+	// }
+
 	if err != nil {
-		fmt.Printf("[ERROR] %s\n", err)
-		print_usage()
-		os.Exit(1)
+		return "", err
 	}
-	if manifestPath == nil || *manifestPath == "" || len(*manifestPath) == 0 {
-		fmt.Println("[ERROR] Missing manifest argument")
+
+	if *manifestPath == "" {
 		print_usage()
-		os.Exit(1)
+		return "", fmt.Errorf("Missing manifest argument")
 	}
+
 	if len(*debugModeFlag) > 0 {
-		fmt.Println("[INFO] found '-debug' flag, enabling print debug mode ")
+		fmt.Println("[INFO] found '-debug' flag, enabling print debug mode")
 		PRINT_DEBUG = true
 	}
 	fmt.Printf("Using manifestPath: '%s'\n", *manifestPath)
-	return *manifestPath
+	return *manifestPath, err
 }
 
 func print_debug(arg string) {
@@ -82,7 +87,7 @@ func print_debug(arg string) {
 	}
 }
 
-func loadYAML(manifestPath string) (manifest YamlManifest) {
+func LoadYAML(manifestPath string) (manifest YamlManifest) {
 	b, err := ioutil.ReadFile(manifestPath)
 
 	if err != nil {
@@ -144,11 +149,11 @@ func print_cf_target(cliConnection plugin.CliConnection, args []string) {
 	}
 }
 
-func fetch_cf_services(cliConnection plugin.CliConnection) (cf_services []string) {
+func Fetch_cf_services(cliConnection plugin.CliConnection) (cf_services []string) {
 	fmt.Println("  Fetching cf services from the target foundation ...")
 	cfServices, err := cliConnection.GetServices()
 	if err != nil {
-		fmt.Errorf("[ERROR] ", err)
+		fmt.Errorf("[ERROR] %s", err)
 		os.Exit(1)
 	}
 	for _, cfService := range cfServices {
@@ -171,11 +176,11 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-func check_routes(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
+func Check_routes(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
 	fmt.Println("\nChecking Routes availability specified in the manifest from the target ... ", manifestPath)
 	manifestRoutes := ParseManifestRoutes(manifest)
-	domainsGuidMap, domainList := fetch_cf_domains_guid(cliConnection)
+	domainsGuidMap, domainList := Fetch_cf_domains_guid(cliConnection)
 	var goodList []AppRouteResult
 	var badList []AppRouteResult
 	for _, manifestRoute := range manifestRoutes {
@@ -187,7 +192,7 @@ func check_routes(cliConnection plugin.CliConnection, manifestPath string, manif
 		} else if !stringInSlice(domain, domainList) {
 			badList = append(badList, AppRouteResult{appName: app, route: route, message: fmt.Sprintf("No such domain '%s' in cf domains", domain)})
 		} else {
-			if check_route_reserved(cliConnection, host, domain, domainsGuidMap[domain]) {
+			if Check_route_reserved(cliConnection, host, domain, domainsGuidMap[domain]) {
 				badList = append(badList, AppRouteResult{appName: app, route: route, message: fmt.Sprintf("Reserved is reserved")})
 			} else {
 				goodList = append(goodList, AppRouteResult{appName: app, route: route, message: ""})
@@ -210,11 +215,11 @@ func check_routes(cliConnection plugin.CliConnection, manifestPath string, manif
 	return status
 }
 
-func check_manifest_services(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
+func Check_services(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
 	fmt.Println("\nChecking Service instance from the manifest ...", manifestPath)
 	manifestServices := ParseManifestServices(manifest)
-	cf_services := fetch_cf_services(cliConnection)
+	cf_services := Fetch_cf_services(cliConnection)
 
 	var goodList []AppServiceResult
 	var badList []AppServiceResult
@@ -256,11 +261,12 @@ func split_route(manifestRoute string) (host string, domain string) {
 }
 
 // fetch domain list/guid
-func fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap map[string]string, domainList []string) {
+func Fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap map[string]string, domainList []string) {
 	fmt.Println("  Fetching cf domains, guid from the target foundation ...")
 
 	// url := fmt.Sprintf("curl /v3/domains | jq \'.resources[]| \"\\(.name) \\(.guid)\"\\")
 	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", "/v3/domains"})...)
+	print_debug(fmt.Sprintf("  %s", output))
 	if err != nil {
 		fmt.Println("[ERROR] ", err)
 		os.Exit(1)
@@ -270,7 +276,7 @@ func fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap m
 	var jsonObj Domains
 	err = json.Unmarshal([]byte(jsonStr), &jsonObj)
 	if err != nil {
-		fmt.Println("[ERROR] ", err)
+		fmt.Println("[ERROR] Unmarshal: ", err)
 		os.Exit(1)
 	}
 
@@ -287,11 +293,11 @@ func fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap m
 
 // if route reserved -> wrong.
 // https://v3-apidocs.cloudfoundry.org/version/3.197.0/index.html#check-reserved-routes-for-a-domain
-func check_route_reserved(cliConnection plugin.CliConnection, host string, domain string, domainGuid string) (status bool) {
+func Check_route_reserved(cliConnection plugin.CliConnection, host string, domain string, domainGuid string) (status bool) {
 	print_debug(fmt.Sprintf("  Checking route reservation via cf api for '%s.%s'", host, domain))
 	// url := fmt.Sprintf("curl -H \"Authorization: $(cf oauth-token)\" %s/v3/domains/%s/route_reservations\\?host\\=%s", cfApiEndpoint, domainGuid, host)
 	url := fmt.Sprintf("/v3/domains/%s/route_reservations?host=%s", domainGuid, host)
-	print_debug(fmt.Sprintf(" check_route_reserved url: %s"))
+	print_debug(fmt.Sprintf(" check_route_reserved url: %s", url))
 	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", url})...)
 	if err != nil {
 		fmt.Println("[ERROR] ", err)
