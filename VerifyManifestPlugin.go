@@ -12,48 +12,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// CreateServicePush is the struct implementing the interface defined by the core CLI. It can
-// be found at  "code.cloudfoundry.org/cli/plugin/plugin.go"
-type VerifyManifestPlugin struct {
-	// Exit ExitInterface
-}
-
-type YManifest struct {
-	Applications []YApplication `yaml:"applications"`
-}
-
-type YApplication struct {
-	Name     string                 `yaml:"name"`
-	Env      map[string]interface{} `yaml:"env"`
-	Services []string               `yaml:"services"`
-	Routes   []YRoute               `yaml:"routes"`
-}
-
-type YRoute struct {
-	Route    string `yaml:"route"`
-	Protocol string `yaml:"protocol"`
-}
-
-type ManifestService struct {
-	appName string
-	service string
-}
-type ManifestRoute struct {
-	appName string
-	route   string
-}
-
-type AppServiceResult struct {
-	appName string
-	service string
-}
-
-type AppRouteResult struct {
-	appName string
-	route   string
-	message string
-}
-
 var PRINT_DEBUG bool
 
 func main() {
@@ -124,7 +82,7 @@ func print_debug(arg string) {
 	}
 }
 
-func loadYAML(manifestPath string) (manifest YManifest) {
+func loadYAML(manifestPath string) (manifest YamlManifest) {
 	b, err := ioutil.ReadFile(manifestPath)
 
 	if err != nil {
@@ -132,7 +90,7 @@ func loadYAML(manifestPath string) (manifest YManifest) {
 		os.Exit(1)
 	}
 
-	var document YManifest
+	var document YamlManifest
 	err = yaml.Unmarshal(b, &document)
 
 	if err != nil {
@@ -142,7 +100,7 @@ func loadYAML(manifestPath string) (manifest YManifest) {
 	return document
 }
 
-func ParseManifestServices(manifest YManifest) (manifestServices []ManifestService) {
+func ParseManifestServices(manifest YamlManifest) (manifestServices []ManifestService) {
 	fmt.Println("  Parsing manifest services ...")
 	for _, app := range manifest.Applications {
 		if app.Services != nil {
@@ -157,7 +115,7 @@ func ParseManifestServices(manifest YManifest) (manifestServices []ManifestServi
 	return manifestServices
 }
 
-func ParseManifestRoutes(manifest YManifest) (manifestRoutes []ManifestRoute) {
+func ParseManifestRoutes(manifest YamlManifest) (manifestRoutes []ManifestRoute) {
 	fmt.Println("  Parsing manifest routes ...")
 	for _, app := range manifest.Applications {
 		if app.Routes != nil {
@@ -207,15 +165,13 @@ func stringInSlice(a string, list []string) bool {
 	for _, b := range list {
 
 		if a == b {
-			// print_debug(fmt.Sprintf(" stringInSlice: %s %s %s", a, b, "true"))
 			return true
 		}
 	}
-	// print_debug(fmt.Sprintf(" stringInSlice: %s %s ", a, "false"))
 	return false
 }
 
-func check_routes(cliConnection plugin.CliConnection, manifestPath string, manifest YManifest) (status bool) {
+func check_routes(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
 	fmt.Println("\nChecking Routes availability specified in the manifest from the target ... ", manifestPath)
 	manifestRoutes := ParseManifestRoutes(manifest)
@@ -254,7 +210,7 @@ func check_routes(cliConnection plugin.CliConnection, manifestPath string, manif
 	return status
 }
 
-func check_manifest_services(cliConnection plugin.CliConnection, manifestPath string, manifest YManifest) (status bool) {
+func check_manifest_services(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
 	fmt.Println("\nChecking Service instance from the manifest ...", manifestPath)
 	manifestServices := ParseManifestServices(manifest)
@@ -335,7 +291,7 @@ func check_route_reserved(cliConnection plugin.CliConnection, host string, domai
 	print_debug(fmt.Sprintf("  Checking route reservation via cf api for '%s.%s'", host, domain))
 	// url := fmt.Sprintf("curl -H \"Authorization: $(cf oauth-token)\" %s/v3/domains/%s/route_reservations\\?host\\=%s", cfApiEndpoint, domainGuid, host)
 	url := fmt.Sprintf("/v3/domains/%s/route_reservations?host=%s", domainGuid, host)
-	// fmt.Println(url)
+	print_debug(fmt.Sprintf(" check_route_reserved url: %s"))
 	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", url})...)
 	if err != nil {
 		fmt.Println("[ERROR] ", err)
@@ -347,7 +303,7 @@ func check_route_reserved(cliConnection plugin.CliConnection, host string, domai
 	err = json.Unmarshal([]byte(jsonStr), &jsonObj)
 	if err != nil {
 		fmt.Println("[ERROR] ", err)
-		// os.Exit(1)
+		// os.Exit(1) // continue on error
 	}
 
 	return jsonObj.MatchingRoute

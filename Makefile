@@ -1,8 +1,9 @@
 build:
-	go build .
+
+	go build -o ./builds/verify-manifest .
 
 cf:
 	cf uninstall-plugin VerifyManifest || true
-	cf install-plugin verify-manifest -f
+	cf install-plugin ./builds/verify-manifest -f
 
 it: build cf

@@ -8,9 +8,15 @@ This plugin reads manifest.yml and checks follows:
 - checking routes specified from the manifest are available via [check-reserved-routes-for-a-domain cf api](https://v3-apidocs.cloudfoundry.org/version/3.197.0/index.html#check-reserved-routes-for-a-domain)
 
 it exits with 0 if all good. exit 1 otherwise.
-## Build plugin
 
-Clone the project and run following command. plugin should be created under `./builds` folder.
+## Development
+Clone the project and run following command. it builds plugin and install the built plugin into cf cli.
+```sh
+make it
+```
+
+## Build plugin per OS
+plugin should be created under `./builds` folder.
 
 #### For MacOS:
 ```sh
@@ -33,11 +39,12 @@ cf install-plugin ./builds/verify-manifest.exe
 ```
 
 
-list plugins 
+list the installed plugins 
 ```sh
 cf plugins
 ```
-```
+
+```sh
 Listing installed plugins...
 
 plugin                version   command name                  command help
