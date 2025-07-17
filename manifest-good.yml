@@ -1,0 +1,43 @@
+---
+applications:
+- name: spring-music
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 21.+ } }"
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: "{enabled: false}"
+  lifecycle: buildpack
+  services:
+  - my-cups2
+  routes:
+  - route: spring-musicx.apps.internal
+    protocol: http1
+    options: {}
+  processes:
+  - type: task
+    instances: 0
+    memory: 1024M
+    disk_quota: 1024M
+    log-rate-limit-per-second: 16K
+    health-check-type: process
+    readiness-health-check-type: process
+  - type: web
+    instances: 2
+    memory: 1024M
+    disk_quota: 1024M
+    log-rate-limit-per-second: 16K
+    health-check-type: port
+    readiness-health-check-type: process
+- name: spring-music2
+  env:
+    JBP_CONFIG_DEBUG: "{enabled: true}"
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 21.+ } }"
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: "{enabled: false}"
+    JBP_CONFIG_SPRING_BOOT_EFFICIENCY: "{ aot_enabled: true, cds_enabled: true }"
+    LOGGING_LEVEL_ORG_CLOUDFOUNDRY_SECURITY: DEBUG
+    SPRING_PROFILES_ACTIVE: http2
+  lifecycle: buildpack
+  stack: cflinuxfs4
+  services:
+  - my-cups 3
+  - my-cups
+  routes:
+  - route: spring-music2.apps.internal
