@@ -74,23 +74,27 @@ cf target ...
    Space:          test
 
 Checking Service instance from the manifest ... ./fixtures/manifest-good.yml
+  Checking manifest app name ...
   Parsing manifest services ...
   Fetching cf services from the target foundation ...
   [INFO] Existing service instances in current space:
+  - 'existing-service-1'
+  - 'existing-service-2'
   - 'my-cups'
   - 'my-cups 3'
   - 'my-cups2'
-  [GOOD] Service instance specified in manifest exists in current space:
-  - app: 'spring-music', service: 'my-cups2'
-  - app: 'spring-music2', service: 'my-cups 3'
-  - app: 'spring-music2', service: 'my-cups'
+  [GOOD] Service instance specified in manifest that exists in current space:
+  - good app: 'spring-music', service: 'existing-service-1'
+  - good app: 'spring-music2', service: 'existing-service-1'
+  - good app: 'spring-music2', service: 'existing-service-2'
 
 Checking Routes availability specified in the manifest from the target ...  ./fixtures/manifest-good.yml
+  Checking manifest app name ...
   Parsing manifest routes ...
   Fetching cf domains, guid from the target foundation ...
   [GOOD] Available routes specified in the manifest in the target foundation:
-  - app: 'spring-music', service: 'spring-musicx.apps.internal'
-  - app: 'spring-music2', service: 'spring-music2.apps.internal'
+  - good app: 'spring-music', route: 'spring-musicx.apps.internal'
+  - good app: 'spring-music2', route: 'spring-music2.apps.internal'
 ```
 
 return value from the plugin 
@@ -114,32 +118,36 @@ cf target ...
    Space:          test
 
 Checking Service instance from the manifest ... ./fixtures/manifest-bad.yml
+  Checking manifest app name ...
   Parsing manifest services ...
   Fetching cf services from the target foundation ...
   [INFO] Existing service instances in current space:
+  - 'existing-service-1'
+  - 'existing-service-2'
   - 'my-cups'
   - 'my-cups 3'
   - 'my-cups2'
-  [GOOD] Service instance specified in manifest exists in current space:
-  - app: 'spring-music', service: 'my-cups2'
-  - app: 'spring-music2', service: 'my-cups 3'
-  - app: 'spring-music2', service: 'my-cups'
-  [ERROR] Missing Service instance specified in manifest exists in current space:
-  - app: 'spring-music', service: 'service-not-exist1'
-  - app: 'spring-music', service: 'service-not-exist2'
-  - app: 'spring-music2', service: '2service-not-exist1'
-  - app: 'spring-music2', service: '2service-not-exist2'
+  [GOOD] Service instance specified in manifest that exists in current space:
+  - good app: 'spring-music', service: 'existing-service-1'
+  - good app: 'spring-music2', service: 'existing-service-2'
+  - good app: 'spring-music2', service: 'existing-service-1'
+  [ERROR] Missing Service instance specified in manifest but not exist in current space:
+  - error app: 'spring-music', service: 'service-not-exist1'
+  - error app: 'spring-music', service: 'service-not-exist2'
+  - error app: 'spring-music2', service: '2service-not-exist1'
+  - error app: 'spring-music2', service: '2service-not-exist2'
 
 Checking Routes availability specified in the manifest from the target ...  ./fixtures/manifest-bad.yml
+  Checking manifest app name ...
   Parsing manifest routes ...
   Fetching cf domains, guid from the target foundation ...
   [GOOD] Available routes specified in the manifest in the target foundation:
-  - app: 'spring-music', service: 'spring-music.apps.internal'
-  - app: 'spring-music2', service: 'spring-music2.apps.internal'
+  - good app: 'spring-music', route: 'spring-music.apps.internal'
+  - good app: 'spring-music2', route: 'spring-music2.apps.internal'
   [ERROR] Not Available routes specified in the manifest in the target foundation:
-  - app: 'spring-music', service: 'cryodocs.apps.dhaka.cf-app.com' -> Reserved is reserved
-  - app: 'spring-music', service: 'apps.internal' -> No such domain 'internal' in cf domains
-  - app: 'spring-music', service: 'internal' -> Invalid route. too short
+  - error app: 'spring-music', route: 'cryodocs.apps.dhaka.cf-app.com' -> Reserved is reserved
+  - error app: 'spring-music', route: 'apps.internal' -> No such domain 'internal' in cf domains
+  - error app: 'spring-music', route: 'internal' -> Invalid route. too short
 
 $ echo $?
 1
