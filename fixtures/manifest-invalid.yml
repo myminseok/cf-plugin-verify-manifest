@@ -1,0 +1,8 @@
+---
+applications:
+
+- name: xx
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 21.+ } }"
+- env:
+    JBP_CONFIG_OPEN_JDK_JRE: "{ jre: { version: 21.+ } }"

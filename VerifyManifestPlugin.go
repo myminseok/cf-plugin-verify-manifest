@@ -38,6 +38,10 @@ func (c *VerifyManifestPlugin) Run(cliConnection plugin.CliConnection, args []st
 	if args[0] == "verify-manifest" {
 		manifestPath, _ := ParseArgs(args)
 		manifest := LoadYAML(manifestPath)
+		if !CheckManifestAppName(manifestPath, manifest) {
+			os.Exit(1)
+		}
+
 		print_cf_target(cliConnection, args)
 		var all_good = true
 		all_good = Check_services(cliConnection, manifestPath, manifest)
@@ -105,7 +109,24 @@ func LoadYAML(manifestPath string) (manifest YamlManifest) {
 	return document
 }
 
-func ParseManifestServices(manifest YamlManifest) (manifestServices []ManifestService) {
+func CheckManifestAppName(manifestPath string, manifest YamlManifest) (status bool) {
+	status = true
+	fmt.Println("  Checking manifest app name ...")
+	for i, app := range manifest.Applications {
+		print_debug(fmt.Sprintf("  index: %v appname:%s", i, app.Name))
+		if len(app.Name) == 0 {
+			fmt.Printf("[ERROR] Invalid App name for index '%v' in %s", i, manifestPath)
+			status = false
+			break
+		}
+	}
+	return status
+}
+
+func ParseManifestServices(manifestPath string, manifest YamlManifest) (manifestServices []ManifestService) {
+	if !CheckManifestAppName(manifestPath, manifest) {
+		return manifestServices
+	}
 	fmt.Println("  Parsing manifest services ...")
 	for _, app := range manifest.Applications {
 		if app.Services != nil {
@@ -120,7 +141,10 @@ func ParseManifestServices(manifest YamlManifest) (manifestServices []ManifestSe
 	return manifestServices
 }
 
-func ParseManifestRoutes(manifest YamlManifest) (manifestRoutes []ManifestRoute) {
+func ParseManifestRoutes(manifestPath string, manifest YamlManifest) (manifestRoutes []ManifestRoute) {
+	if !CheckManifestAppName(manifestPath, manifest) {
+		return manifestRoutes
+	}
 	fmt.Println("  Parsing manifest routes ...")
 	for _, app := range manifest.Applications {
 		if app.Routes != nil {
@@ -179,7 +203,7 @@ func stringInSlice(a string, list []string) bool {
 func Check_routes(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
 	fmt.Println("\nChecking Routes availability specified in the manifest from the target ... ", manifestPath)
-	manifestRoutes := ParseManifestRoutes(manifest)
+	manifestRoutes := ParseManifestRoutes(manifestPath, manifest)
 	domainsGuidMap, domainList := Fetch_cf_domains_guid(cliConnection)
 	var goodList []AppRouteResult
 	var badList []AppRouteResult
@@ -202,14 +226,14 @@ func Check_routes(cliConnection plugin.CliConnection, manifestPath string, manif
 	if len(goodList) > 0 {
 		fmt.Println("  [GOOD] Available routes specified in the manifest in the target foundation:")
 		for _, item := range goodList {
-			fmt.Printf("  - app: '%s', service: '%s'\n", item.appName, item.route)
+			fmt.Printf("  - good app: '%s', route: '%s'\n", item.appName, item.route)
 		}
 	}
 	if len(badList) > 0 {
 		status = false
 		fmt.Println("  [ERROR] Not Available routes specified in the manifest in the target foundation:")
 		for _, item := range badList {
-			fmt.Printf("  - app: '%s', service: '%s' -> %s\n", item.appName, item.route, item.message)
+			fmt.Printf("  - error app: '%s', route: '%s' -> %s\n", item.appName, item.route, item.message)
 		}
 	}
 	return status
@@ -217,8 +241,9 @@ func Check_routes(cliConnection plugin.CliConnection, manifestPath string, manif
 
 func Check_services(cliConnection plugin.CliConnection, manifestPath string, manifest YamlManifest) (status bool) {
 	status = true
+
 	fmt.Println("\nChecking Service instance from the manifest ...", manifestPath)
-	manifestServices := ParseManifestServices(manifest)
+	manifestServices := ParseManifestServices(manifestPath, manifest)
 	cf_services := Fetch_cf_services(cliConnection)
 
 	var goodList []AppServiceResult
@@ -234,7 +259,7 @@ func Check_services(cliConnection plugin.CliConnection, manifestPath string, man
 	if len(goodList) > 0 {
 		fmt.Println("  [GOOD] Service instance specified in manifest that exists in current space:")
 		for _, item := range goodList {
-			fmt.Printf("  - app: '%s', service: '%s'\n", item.appName, item.service)
+			fmt.Printf("  - good app: '%s', service: '%s'\n", item.appName, item.service)
 		}
 	}
 
@@ -242,7 +267,7 @@ func Check_services(cliConnection plugin.CliConnection, manifestPath string, man
 		status = false
 		fmt.Println("  [ERROR] Missing Service instance specified in manifest but not exist in current space:")
 		for _, item := range badList {
-			fmt.Printf("  - app: '%s', service: '%s'\n", item.appName, item.service)
+			fmt.Printf("  - error app: '%s', service: '%s'\n", item.appName, item.service)
 		}
 	}
 	return status

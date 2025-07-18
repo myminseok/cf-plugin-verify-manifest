@@ -54,29 +54,39 @@ var _ = Describe("Parsing Arguments", func() {
 })
 
 var _ = Describe("Parse manifest yaml", func() {
-
+	manifest_invalid_path := "./fixtures/manifest-invalid.yml"
 	manifest_good_path := "./fixtures/manifest-good.yml"
 	manifest_bad_path := "./fixtures/manifest-bad.yml"
+	manifest_invalid := LoadYAML(manifest_invalid_path)
 	manifest_good := LoadYAML(manifest_good_path)
 	manifest_bad := LoadYAML(manifest_bad_path)
 
+	It("parse invalid manifest for service", func() {
+		manifestServices := ParseManifestServices(manifest_invalid_path, manifest_invalid)
+		Expect(manifestServices).To(HaveLen(0))
+	})
+
 	It("parse good manifest for service", func() {
-		manifestServices := ParseManifestServices(manifest_good)
+		manifestServices := ParseManifestServices(manifest_good_path, manifest_good)
 		Expect(manifestServices).To(HaveLen(3))
 	})
 
 	It("parse bad manifest for service", func() {
-		manifestServices := ParseManifestServices(manifest_bad)
+		manifestServices := ParseManifestServices(manifest_bad_path, manifest_bad)
 		Expect(manifestServices).To(HaveLen(7))
 	})
 
+	It("parse invalid manifest for route", func() {
+		manifestRoutes := ParseManifestRoutes(manifest_invalid_path, manifest_invalid)
+		Expect(manifestRoutes).To(HaveLen(0))
+	})
 	It("parse good manifest for route", func() {
-		manifestRoutes := ParseManifestRoutes(manifest_good)
+		manifestRoutes := ParseManifestRoutes(manifest_good_path, manifest_good)
 		Expect(manifestRoutes).To(HaveLen(2))
 	})
 
 	It("parse bad manifest for route", func() {
-		manifestRoutes := ParseManifestRoutes(manifest_bad)
+		manifestRoutes := ParseManifestRoutes(manifest_bad_path, manifest_bad)
 		Expect(manifestRoutes).To(HaveLen(5))
 	})
 })
