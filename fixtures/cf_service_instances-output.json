@@ -1,0 +1,23 @@
+[{
+  "pagination": {
+    "total_results": 3,
+    "total_pages": 1
+  },
+  "resources": [
+    {
+      "guid": "a144febd-8509-466b-8c57-7b8bb463ecd9",
+      "created_at": "2025-07-15T13:21:12Z",
+      "updated_at": "2025-07-15T13:21:12Z",
+      "name": "existing-service-1",
+      "tags": []
+    },
+    {
+      "guid": "4992f364-5dc0-44b8-a3e7-0627fdfcb3d7",
+      "created_at": "2025-07-15T13:37:25Z",
+      "updated_at": "2025-07-15T13:37:25Z",
+      "name": "existing-service-2",
+      "tags": []
+    }
+  ]
+}
+]

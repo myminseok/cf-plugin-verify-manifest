@@ -12,7 +12,7 @@ applications:
   stack: cflinuxfs4
   services:
   - service-not-exist1
-  - my-cups2
+  - existing-service-1
   - service-not-exist2
   routes:
   # b6617e82-2877-4922-9565-80b03d7a1ded
@@ -50,8 +50,8 @@ applications:
   stack: cflinuxfs4
   services:
   - 2service-not-exist1
-  - my-cups 3
-  - my-cups
+  - existing-service-2
+  - existing-service-1
   - 2service-not-exist2
   routes:
   - route: spring-music2.apps.internal

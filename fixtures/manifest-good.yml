@@ -6,7 +6,7 @@ applications:
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: "{enabled: false}"
   lifecycle: buildpack
   services:
-  - my-cups2
+  - existing-service-1
   routes:
   - route: spring-musicx.apps.internal
     protocol: http1
@@ -37,7 +37,7 @@ applications:
   lifecycle: buildpack
   stack: cflinuxfs4
   services:
-  - my-cups 3
-  - my-cups
+  - existing-service-1
+  - existing-service-2
   routes:
   - route: spring-music2.apps.internal

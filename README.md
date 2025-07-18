@@ -66,14 +66,14 @@ Run the plugin with manifest.
 cf  verify-manifest -f ./fixtures/manifest-good.yml
 ```
 ```
-Using manifestPath: './manifest-good.yml'
+Using manifestPath: './fixtures/manifest-good.yml'
 cf target ...
    API endpoint:   https://api.sys.dhaka.cf-app.com (API version: 3.194.0)
    User:           minseok.kim@broadcom.com
    Org:            minseok
    Space:          test
 
-Checking Service instance from the manifest ... ./manifest-good.yml
+Checking Service instance from the manifest ... ./fixtures/manifest-good.yml
   Parsing manifest services ...
   Fetching cf services from the target foundation ...
   [INFO] Existing service instances in current space:
@@ -85,7 +85,7 @@ Checking Service instance from the manifest ... ./manifest-good.yml
   - app: 'spring-music2', service: 'my-cups 3'
   - app: 'spring-music2', service: 'my-cups'
 
-Checking Routes availability specified in the manifest from the target ...  ./manifest-good.yml
+Checking Routes availability specified in the manifest from the target ...  ./fixtures/manifest-good.yml
   Parsing manifest routes ...
   Fetching cf domains, guid from the target foundation ...
   [GOOD] Available routes specified in the manifest in the target foundation:
@@ -105,15 +105,15 @@ echo $?
 cf  verify-manifest -f ./fixtures/manifest-bad.yml
 ```
 
-```sh
-Using manifestPath: './manifest-bad.yml'
+```
+Using manifestPath: './fixtures/manifest-bad.yml'
 cf target ...
    API endpoint:   https://api.sys.dhaka.cf-app.com (API version: 3.194.0)
    User:           minseok.kim@broadcom.com
    Org:            minseok
    Space:          test
 
-Checking Service instance from the manifest ... ./manifest-bad.yml
+Checking Service instance from the manifest ... ./fixtures/manifest-bad.yml
   Parsing manifest services ...
   Fetching cf services from the target foundation ...
   [INFO] Existing service instances in current space:
@@ -130,7 +130,7 @@ Checking Service instance from the manifest ... ./manifest-bad.yml
   - app: 'spring-music2', service: '2service-not-exist1'
   - app: 'spring-music2', service: '2service-not-exist2'
 
-Checking Routes availability specified in the manifest from the target ...  ./manifest-bad.yml
+Checking Routes availability specified in the manifest from the target ...  ./fixtures/manifest-bad.yml
   Parsing manifest routes ...
   Fetching cf domains, guid from the target foundation ...
   [GOOD] Available routes specified in the manifest in the target foundation:

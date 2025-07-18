@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"testing"
 
+	plugin_models "code.cloudfoundry.org/cli/plugin/models"
 	"code.cloudfoundry.org/cli/plugin/pluginfakes"
 	. "github.com/myminseok/verify-manifest"
 	. "github.com/onsi/ginkgo"
@@ -54,8 +55,10 @@ var _ = Describe("Parsing Arguments", func() {
 
 var _ = Describe("Parse manifest yaml", func() {
 
-	manifest_good := LoadYAML("./fixtures/manifest-good.yml")
-	manifest_bad := LoadYAML("./fixtures/manifest-bad.yml")
+	manifest_good_path := "./fixtures/manifest-good.yml"
+	manifest_bad_path := "./fixtures/manifest-bad.yml"
+	manifest_good := LoadYAML(manifest_good_path)
+	manifest_bad := LoadYAML(manifest_bad_path)
 
 	It("parse good manifest for service", func() {
 		manifestServices := ParseManifestServices(manifest_good)
@@ -82,6 +85,7 @@ var _ = Describe("Fetch_cf_domains_guid", func() {
 	var cliConnection *pluginfakes.FakeCliConnection
 	var mapData []interface{}
 	var stringSlice []string
+
 	BeforeEach(func() {
 		cliConnection = &pluginfakes.FakeCliConnection{}
 		byteArray, _ := ioutil.ReadFile("./fixtures/domains-program-output-simple.json")
@@ -110,6 +114,43 @@ var _ = Describe("Fetch_cf_domains_guid", func() {
 		domainsGuidMap, domainList := Fetch_cf_domains_guid(cliConnection)
 		Expect(domainsGuidMap).To(HaveLen(3))
 		Expect(domainList).To(HaveLen(3))
+	})
+
+})
+
+var _ = Describe("Check_services", func() {
+	manifest_good_path := "./fixtures/manifest-good.yml"
+	manifest_good := LoadYAML(manifest_good_path)
+	manifest_bad_path := "./fixtures/manifest-bad.yml"
+	manifest_bad := LoadYAML(manifest_bad_path)
+	var cliConnection *pluginfakes.FakeCliConnection
+	var faceServices []plugin_models.GetServices_Model
+
+	BeforeEach(func() {
+		cliConnection = &pluginfakes.FakeCliConnection{}
+		fakeServices1 := plugin_models.GetServices_Model{
+			Name: "existing-service-1",
+		}
+		fakeServices2 := plugin_models.GetServices_Model{
+			Name: "existing-service-2",
+		}
+
+		faceServices = []plugin_models.GetServices_Model{fakeServices1, fakeServices2}
+		cliConnection.GetServicesStub = func() ([]plugin_models.GetServices_Model, error) {
+			return faceServices, nil
+		}
+
+	})
+
+	It("Check_services manifest_good", func() {
+		status := Check_services(cliConnection, manifest_good_path, manifest_good)
+		statusStr := fmt.Sprintf("%v", status) // TODO: no method for bool value
+		Expect(statusStr).To(Equal("true"))
+	})
+	It("Check_services manifest_bad", func() {
+		status := Check_services(cliConnection, manifest_bad_path, manifest_bad)
+		statusStr := fmt.Sprintf("%v", status) // TODO: no method for bool value
+		Expect(statusStr).To(Equal("false"))
 	})
 
 })

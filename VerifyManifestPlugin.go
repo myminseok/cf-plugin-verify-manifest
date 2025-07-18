@@ -138,7 +138,7 @@ func ParseManifestRoutes(manifest YamlManifest) (manifestRoutes []ManifestRoute)
 }
 
 func print_cf_target(cliConnection plugin.CliConnection, args []string) {
-	fmt.Println("cf target ...")
+	fmt.Print("cf target ...")
 	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"target"})...)
 	if err != nil {
 		fmt.Println("[ERROR] ", err)
@@ -232,7 +232,7 @@ func Check_services(cliConnection plugin.CliConnection, manifestPath string, man
 	}
 
 	if len(goodList) > 0 {
-		fmt.Println("  [GOOD] Service instance specified in manifest exists in current space:")
+		fmt.Println("  [GOOD] Service instance specified in manifest that exists in current space:")
 		for _, item := range goodList {
 			fmt.Printf("  - app: '%s', service: '%s'\n", item.appName, item.service)
 		}
@@ -240,7 +240,7 @@ func Check_services(cliConnection plugin.CliConnection, manifestPath string, man
 
 	if len(badList) > 0 {
 		status = false
-		fmt.Println("  [ERROR] Missing Service instance specified in manifest exists in current space:")
+		fmt.Println("  [ERROR] Missing Service instance specified in manifest but not exist in current space:")
 		for _, item := range badList {
 			fmt.Printf("  - app: '%s', service: '%s'\n", item.appName, item.service)
 		}
