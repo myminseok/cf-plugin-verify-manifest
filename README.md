@@ -12,7 +12,7 @@ it exits with 0 if all good. exit 1 otherwise.
 ## Development
 Clone the project and run following command. it builds plugin and install the built plugin into cf cli.
 ```sh
-make it
+make all
 ```
 
 ## Build plugin per OS

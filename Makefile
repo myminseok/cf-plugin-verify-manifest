@@ -6,4 +6,4 @@ cf:
 	cf uninstall-plugin VerifyManifest || true
 	cf install-plugin ./builds/verify-manifest -f
 
-it: build cf
+all: build cf
