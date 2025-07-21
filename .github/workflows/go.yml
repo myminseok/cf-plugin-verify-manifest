@@ -35,4 +35,5 @@ jobs:
           ./builds/verify-manifest-linux
           ./builds/verify-manifest-darwin
           ./builds/verify-manifest.exe
+        tag_name: ${{ steps.tag.outputs.tag }}
           
