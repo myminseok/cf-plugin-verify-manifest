@@ -33,6 +33,5 @@ jobs:
         files: |
           ./builds/verify-manifest-linux
           ./builds/verify-manifest-darwin
-          ./builds/verify-manifest.exe
         tag_name: v0.0.1
           
