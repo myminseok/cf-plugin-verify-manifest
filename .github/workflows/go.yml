@@ -26,3 +26,11 @@ jobs:
 
     - name: Test
       run: go test -v .
+      
+    - name: Upload binaries to release
+        with:
+          files: |
+            ./builds/verify-manifest-linux
+            ./builds/verify-manifest-darwin
+            ./builds/verify-manifest.exe
+            
