@@ -6,14 +6,9 @@ set -e
 SANDBOX=./builds
 rm -rf $SANDBOX
 mkdir $SANDBOX
-#printf "Building Linux...\n"
-#GOOS=linux go build -o $SANDBOX/verify-manifest-linux .
 
 printf "Building OSX...\n"
 GOOS=darwin go build -o $SANDBOX/verify-manifest-darwin-$(arch) .
-
-printf "Building Windows...\n"
-GOOS=windows go build -o $SANDBOX/verify-manifest.exe .
 
 printf "\nBuild summary:\n"
 find $SANDBOX -type f -exec file {} \;
