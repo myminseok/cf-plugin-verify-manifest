@@ -41,11 +41,18 @@ type AppRouteResult struct {
 	message string
 }
 
-type Domains struct {
+type DomainsResources struct {
 	Resources []struct {
 		Guid string `json:"guid"`
 		Name string `json:"name"`
 	} `json:"resources"`
+}
+
+type DomainsPagination struct {
+	Pagination struct {
+		TotalResults int `json:"total_results"`
+		TotalPages   int `json:"total_pages"`
+	} `json:"pagination"`
 }
 type RouteReservationOutput struct {
 	MatchingRoute bool `json:"matching_route"`

@@ -289,27 +289,47 @@ func split_route(manifestRoute string) (host string, domain string) {
 func Fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap map[string]string, domainList []string) {
 	fmt.Println("  Fetching cf domains, guid from the target foundation ...")
 
-	// url := fmt.Sprintf("curl /v3/domains | jq \'.resources[]| \"\\(.name) \\(.guid)\"\\")
-	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", "/v3/domains"})...)
-	print_debug(fmt.Sprintf("  %s", output))
-	if err != nil {
-		fmt.Println("[ERROR] ", err)
-		os.Exit(1)
-	}
+	var paginationObj DomainsPagination
+	var resourcesObj DomainsResources
+	currentPage := 1
+	for true {
+		url := fmt.Sprintf("/v3/domains?page=%v&per_page=10", currentPage)
+		print_debug(fmt.Sprintf("  url:%s", url))
+		output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", url})...)
+		print_debug(fmt.Sprintf("  %s", output))
+		if err != nil {
+			fmt.Println("[ERROR] ", err)
+			os.Exit(1)
+		}
 
-	jsonStr := strings.Join(output, "") // Combine output lines
-	var jsonObj Domains
-	err = json.Unmarshal([]byte(jsonStr), &jsonObj)
-	if err != nil {
-		fmt.Println("[ERROR] Unmarshal: ", err)
-		os.Exit(1)
-	}
+		jsonStr := strings.Join(output, "") // Combine output lines
+		err = json.Unmarshal([]byte(jsonStr), &paginationObj)
+		if err != nil {
+			fmt.Println("[ERROR] Unmarshal DomainsPagination: ", err)
+			os.Exit(1)
+		}
 
-	domainsGuidMap = make(map[string]string)
-	for _, resource := range jsonObj.Resources {
-		print_debug(fmt.Sprintf("  - %s -> %s", resource.Guid, resource.Name))
-		domainList = append(domainList, resource.Name)
-		domainsGuidMap[resource.Name] = resource.Guid
+		err = json.Unmarshal([]byte(jsonStr), &resourcesObj)
+		if err != nil {
+			fmt.Println("[ERROR] Unmarshal DomainsResources: ", err)
+			os.Exit(1)
+		}
+
+		domainsGuidMap = make(map[string]string)
+		for _, resource := range resourcesObj.Resources {
+			print_debug(fmt.Sprintf("  - %s -> %s", resource.Guid, resource.Name))
+			domainList = append(domainList, resource.Name)
+			domainsGuidMap[resource.Name] = resource.Guid
+		}
+
+		// process the next pages if exists.
+		totalResults := paginationObj.Pagination.TotalResults
+		totalPages := paginationObj.Pagination.TotalPages
+		print_debug(fmt.Sprintf("  TotalResults:%v totalPages:%v currentPage:%v", totalResults, totalPages, currentPage))
+		if currentPage >= totalPages {
+			break
+		}
+		currentPage++
 	}
 
 	return domainsGuidMap, domainList
@@ -320,7 +340,6 @@ func Fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap m
 // https://v3-apidocs.cloudfoundry.org/version/3.197.0/index.html#check-reserved-routes-for-a-domain
 func Check_route_reserved(cliConnection plugin.CliConnection, host string, domain string, domainGuid string) (status bool) {
 	print_debug(fmt.Sprintf("  Checking route reservation via cf api for '%s.%s'", host, domain))
-	// url := fmt.Sprintf("curl -H \"Authorization: $(cf oauth-token)\" %s/v3/domains/%s/route_reservations\\?host\\=%s", cfApiEndpoint, domainGuid, host)
 	url := fmt.Sprintf("/v3/domains/%s/route_reservations?host=%s", domainGuid, host)
 	print_debug(fmt.Sprintf(" check_route_reserved url: %s", url))
 	output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", url})...)
