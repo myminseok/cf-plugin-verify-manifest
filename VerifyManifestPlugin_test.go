@@ -154,13 +154,11 @@ var _ = Describe("Check_services", func() {
 
 	It("Check_services manifest_good", func() {
 		status := Check_services(cliConnection, manifest_good_path, manifest_good)
-		statusStr := fmt.Sprintf("%v", status) // TODO: no method for bool value
-		Expect(statusStr).To(Equal("true"))
+		Expect(status).To(BeTrue())
 	})
 	It("Check_services manifest_bad", func() {
 		status := Check_services(cliConnection, manifest_bad_path, manifest_bad)
-		statusStr := fmt.Sprintf("%v", status) // TODO: no method for bool value
-		Expect(statusStr).To(Equal("false"))
+		Expect(status).To(BeFalse())
 	})
 
 })
