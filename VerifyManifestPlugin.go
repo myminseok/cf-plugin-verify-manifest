@@ -293,7 +293,7 @@ func Fetch_cf_domains_guid(cliConnection plugin.CliConnection) (domainsGuidMap m
 	var resourcesObj DomainsResources
 	currentPage := 1
 	for true {
-		url := fmt.Sprintf("/v3/domains?page=%v&per_page=10", currentPage)
+		url := fmt.Sprintf("/v3/domains?page=%v&per_page=50", currentPage)
 		print_debug(fmt.Sprintf("  url:%s", url))
 		output, err := cliConnection.CliCommandWithoutTerminalOutput(append([]string{"curl", url})...)
 		print_debug(fmt.Sprintf("  %s", output))
