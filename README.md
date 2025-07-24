@@ -153,3 +153,10 @@ $ echo $?
 1
 ```
 
+### init go module
+run following command to initialize go.mod, go.sum
+```
+go mod init github.com/myminseok/verify-manifest
+go mod tidy
+```
+
